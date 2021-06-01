@@ -9,8 +9,7 @@
 use curl::easy::{Easy, List};
 use serde_derive::{Deserialize, Serialize};
 use serde_json::json;
-
-use crate::error::Result;
+use anyhow::Result;
 
 /// Authenticate with Mojang
 #[derive(Debug, Clone)]
