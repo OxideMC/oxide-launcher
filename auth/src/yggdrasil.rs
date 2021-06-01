@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2021 TheOddGarlic <umutinanerdogan62@gmail.com>
+ * Licensed under the Open Software License version 3.0
+ */
+
 //! Adapted from [ozelot](http://github.com/C4K3/ozelot)
 #![allow(non_snake_case)]
 
@@ -5,7 +10,7 @@ use curl::easy::{Easy, List};
 use serde_derive::{Deserialize, Serialize};
 use serde_json::json;
 
-use crate::errors::Result;
+use crate::error::Result;
 
 /// Authenticate with Mojang
 #[derive(Debug, Clone)]

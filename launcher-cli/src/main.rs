@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2021 TheOddGarlic <umutinanerdogan62@gmail.com>
+ * Licensed under the Open Software License version 3.0
+ */
+
 use auth::yggdrasil::Authenticate;
 use clap::{App, Arg};
 use launcher_core::Launcher;
