@@ -97,7 +97,7 @@ impl Validate {
         Ok(())
     }
 
-    pub fn new<S: Into<String>, O: Into<Option<String>>>(accessToken: S, clientToken: O) -> Self {
+    pub fn new<S: Into<String>>(accessToken: S, clientToken: Option<String>) -> Self {
         Self {
             accessToken: accessToken.into(),
             clientToken: clientToken.into(),
