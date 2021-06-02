@@ -36,7 +36,7 @@ impl LauncherBuilder {
         }
     }
 
-    pub fn game_directory<S: Into<PathBuf>>(mut self, game_directory: S) -> Self {
+    pub fn game_directory<P: Into<PathBuf>>(mut self, game_directory: P) -> Self {
         self.game_directory = Some(game_directory.into());
         self
     }

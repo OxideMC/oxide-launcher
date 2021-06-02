@@ -56,8 +56,8 @@ fn main() {
         .expect("Reading password failed.");
 
     let auth_response = Authenticate::new(
-        email_or_username.trim().to_string(),
-        password.trim().to_string(),
+        email_or_username.trim(),
+        password.trim(),
     )
     .perform()
     .unwrap();

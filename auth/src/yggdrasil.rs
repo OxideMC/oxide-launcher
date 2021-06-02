@@ -41,10 +41,10 @@ impl Authenticate {
         Ok(serde_json::from_str(&res)?)
     }
 
-    pub fn new(username: String, password: String) -> Self {
+    pub fn new<S: Into<String>>(username: S, password: S) -> Self {
         Self {
-            username: username,
-            password: password,
+            username: username.into(),
+            password: password.into(),
             clientToken: None,
             requestUser: false,
         }
@@ -70,10 +70,10 @@ impl Refresh {
         Ok(serde_json::from_str(&res)?)
     }
 
-    pub fn new(accessToken: String, clientToken: String, requestUser: bool) -> Self {
+    pub fn new<S: Into<String>>(accessToken: S, clientToken: S, requestUser: bool) -> Self {
         Self {
-            accessToken: accessToken,
-            clientToken: clientToken,
+            accessToken: accessToken.into(),
+            clientToken: clientToken.into(),
             requestUser: requestUser,
         }
     }
@@ -97,10 +97,10 @@ impl Validate {
         Ok(())
     }
 
-    pub fn new(accessToken: String, clientToken: Option<String>) -> Self {
+    pub fn new<S: Into<String>, O: Into<Option<String>>>(accessToken: S, clientToken: O) -> Self {
         Self {
-            accessToken: accessToken,
-            clientToken: clientToken,
+            accessToken: accessToken.into(),
+            clientToken: clientToken.into(),
         }
     }
 }
@@ -123,10 +123,10 @@ impl SignOut {
         Ok(())
     }
 
-    pub fn new(username: String, password: String) -> Self {
+    pub fn new<S: Into<String>>(username: S, password: S) -> Self {
         Self {
-            username: username,
-            password: password,
+            username: username.into(),
+            password: password.into(),
         }
     }
 }
@@ -149,10 +149,10 @@ impl Invalidate {
         Ok(())
     }
 
-    pub fn new(accessToken: String, clientToken: String) -> Self {
+    pub fn new<S: Into<String>>(accessToken: S, clientToken: S) -> Self {
         Self {
-            accessToken: accessToken,
-            clientToken: clientToken,
+            accessToken: accessToken.into(),
+            clientToken: clientToken.into(),
         }
     }
 }
