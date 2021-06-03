@@ -52,29 +52,27 @@ impl LauncherBuilder {
         self
     }
 
-    pub fn build(self) -> Launcher {
+    pub fn build(self) -> Result<Launcher> {
         let game_directory = match self.game_directory {
             Some(dir) => dir,
-            None => {
-                if cfg!(target_os = "windows") {
-                    PathBuf::from(format!("{}/.minecraft", std::env::var("APPDATA").unwrap()))
-                } else if cfg!(target_os = "macos") {
-                    PathBuf::from(format!(
-                        "{}/Library/Application Support/.minecraft",
-                        std::env::var("HOME").unwrap()
-                    ))
-                } else {
-                    PathBuf::from(format!("{}/.minecraft", std::env::var("HOME").unwrap()))
-                }
-            }
+            None => PathBuf::from(if cfg!(target_os = "windows") {
+                format!("{}/.minecraft", std::env::var("APPDATA")?)
+            } else if cfg!(target_os = "macos") {
+                format!(
+                    "{}/Library/Application Support/.minecraft",
+                    std::env::var("HOME")?
+                )
+            } else {
+                format!("{}/.minecraft", std::env::var("HOME")?)
+            }),
         };
 
-        Launcher {
+        Ok(Launcher {
             access_token: self.access_token,
             client_token: self.client_token,
             profile: self.profile,
             game_directory: game_directory,
-        }
+        })
     }
 }
 

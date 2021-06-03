@@ -60,7 +60,7 @@ fn main() -> Result<()> {
 
     let launcher = Launcher::builder(&auth_response)
         .game_directory(launcher_directory)
-        .build();
+        .build()?;
 
     // TODO: download minecraft
     // TODO: launch minecraft
