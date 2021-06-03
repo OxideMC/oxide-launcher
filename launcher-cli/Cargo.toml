@@ -10,3 +10,4 @@ edition = "2018"
 launcher-core = { path = "../launcher-core" }
 auth = { path = "../auth" }
 clap = "2.33.3"
+anyhow = "1.0.40"
