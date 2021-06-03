@@ -55,12 +55,9 @@ fn main() {
         .read_line(&mut password)
         .expect("Reading password failed.");
 
-    let auth_response = Authenticate::new(
-        email_or_username.trim(),
-        password.trim(),
-    )
-    .perform()
-    .unwrap();
+    let auth_response = Authenticate::new(email_or_username.trim(), password.trim())
+        .perform()
+        .unwrap();
 
     let launcher = Launcher::builder(&auth_response)
         .game_directory(launcher_directory)

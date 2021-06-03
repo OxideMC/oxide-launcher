@@ -6,10 +6,10 @@
 //! Adapted from [ozelot](http://github.com/C4K3/ozelot)
 #![allow(non_snake_case)]
 
+use anyhow::Result;
 use curl::easy::{Easy, List};
 use serde_derive::{Deserialize, Serialize};
 use serde_json::json;
-use anyhow::Result;
 
 /// Authenticate with Mojang
 #[derive(Debug, Clone)]
