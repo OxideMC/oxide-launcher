@@ -3,14 +3,13 @@
  * Licensed under the Open Software License version 3.0
  */
 
+pub mod meta;
+
 use anyhow::Result;
 use auth::yggdrasil::{AuthenticationResponse, NameUUID};
-use serde_derive::Deserialize;
 use std::path::PathBuf;
 
-use meta::VersionManifest;
-
-pub mod meta;
+use meta::{VersionManifest, Versions};
 
 pub struct Launcher {
     pub access_token: String,
@@ -74,28 +73,4 @@ impl LauncherBuilder {
             game_directory: game_directory,
         })
     }
-}
-
-#[derive(Debug, Deserialize, Clone)]
-pub struct Versions {
-    latest: LatestVersions,
-    versions: Vec<Version>,
-}
-
-#[derive(Debug, Deserialize, Clone)]
-pub struct LatestVersions {
-    release: String,
-    snapshot: String,
-}
-
-#[allow(non_snake_case)]
-#[derive(Debug, Deserialize, Clone)]
-pub struct Version {
-    id: String,
-    r#type: String,
-    url: String,
-    time: String,
-    releaseTime: String,
-    sha1: String,
-    complianceLevel: u8,
 }

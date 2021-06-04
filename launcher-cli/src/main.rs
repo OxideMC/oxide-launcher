@@ -5,7 +5,7 @@
 
 use anyhow::Result;
 use auth::yggdrasil::Authenticate;
-use clap::{App, Arg};
+use clap::{App, Arg, ArgMatches, SubCommand};
 use launcher_core::Launcher;
 use std::io::Write;
 use std::path::PathBuf;
@@ -27,6 +27,10 @@ fn main() -> Result<()> {
                 .default_value(&default_launcher_directory)
                 .takes_value(true),
         )
+        .subcommand(
+            SubCommand::with_name("download")
+                .about("Downloads the desired Minecraft (vanilla) version."),
+        )
         .get_matches();
 
     let launcher_directory = PathBuf::from(
@@ -38,6 +42,19 @@ fn main() -> Result<()> {
     fs::create_dir_all(&launcher_directory)?;
     env::set_current_dir(&launcher_directory)?;
 
+    match matches.subcommand() {
+        ("download", Some(_)) => download(matches, launcher_directory)?,
+        _ => launch(matches, launcher_directory)?,
+    }
+
+    Ok(())
+}
+
+fn download(_matches: ArgMatches, _launcher_directory: PathBuf) -> Result<()> {
+    Ok(())
+}
+
+fn launch(_matches: ArgMatches, launcher_directory: PathBuf) -> Result<()> {
     // TODO: save auth_response to file and load it if file exists,
     //       validate if the credentials are still valid and
     //       if they are not valid then authenticate again.
@@ -58,7 +75,7 @@ fn main() -> Result<()> {
 
     let auth_response = Authenticate::new(email_or_username.trim(), password.trim()).perform()?;
 
-    let launcher = Launcher::builder(&auth_response)
+    let _launcher = Launcher::builder(&auth_response)
         .game_directory(launcher_directory)
         .build()?;
 
