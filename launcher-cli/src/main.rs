@@ -55,7 +55,7 @@ fn download(_matches: ArgMatches, _launcher_directory: PathBuf) -> Result<()> {
 }
 
 fn launch(_matches: ArgMatches, launcher_directory: PathBuf) -> Result<()> {
-    // TODO: save auth_response to file and load it if file exists,
+    // todo: save auth_response to file and load it if file exists,
     //       validate if the credentials are still valid and
     //       if they are not valid then authenticate again.
     let mut email_or_username = String::new();
@@ -79,8 +79,8 @@ fn launch(_matches: ArgMatches, launcher_directory: PathBuf) -> Result<()> {
         .game_directory(launcher_directory)
         .build()?;
 
-    // TODO: download minecraft
-    // TODO: launch minecraft
+    // todo: download minecraft
+    // todo: launch minecraft
 
     Ok(())
 }
