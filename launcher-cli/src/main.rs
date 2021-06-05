@@ -14,7 +14,7 @@ use std::{env, fs, io};
 fn main() -> Result<()> {
     let default_launcher_directory = launcher_directory()?;
 
-    let matches = App::new("launcher-cli")
+    let matches = App::new("oxide-cli")
         .version("0.1")
         .about("Simple Minecraft CLI Launcher")
         .author("TheOddGarlic <umutinanerdogan62@gmail.com>")
@@ -88,15 +88,15 @@ fn launch(_matches: ArgMatches, launcher_directory: PathBuf) -> Result<()> {
 fn launcher_directory() -> Result<String> {
     Ok(
         env::var("MC_LAUNCHER_DIRECTORY").unwrap_or(if cfg!(target_os = "windows") {
-            format!("{}\\.minecraft-cli-launcher", env::var("APPDATA").unwrap())
+            format!("{}\\.oxide-cli", env::var("APPDATA").unwrap())
         } else if cfg!(target_os = "macos") {
             format!(
-                "{}/Library/Application Support/.minecraft-cli-launcher",
+                "{}/Library/Application Support/.oxide-cli",
                 env::var("HOME").unwrap()
             )
         } else {
             format!(
-                "{}/.minecraft-cli-launcher",
+                "{}/.oxide-cli",
                 env::var("XDG_CONFIG_HOME").unwrap_or(env::var("HOME").unwrap())
             )
         }),

@@ -1,5 +1,3 @@
-# Untitled Minecraft Launcher
-
-We need a name for this.
+# Oxide Minecraft Launcher
 
 Currently CLI, will be GUI in the future.
