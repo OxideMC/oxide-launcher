@@ -39,9 +39,9 @@ pub struct LauncherBuilder {
 impl LauncherBuilder {
     pub fn new(auth_response: &AuthenticationResponse) -> Self {
         Self {
-            access_token: auth_response.accessToken.clone(),
-            client_token: auth_response.clientToken.clone(),
-            profile: auth_response.selectedProfile.clone(),
+            access_token: auth_response.access_token.clone(),
+            client_token: auth_response.client_token.clone(),
+            profile: auth_response.selected_profile.clone(),
             launcher_directory: None,
         }
     }

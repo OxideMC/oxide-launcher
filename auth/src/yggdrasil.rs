@@ -4,11 +4,9 @@
  */
 
 //! Adapted from [ozelot](http://github.com/C4K3/ozelot)
-#![allow(non_snake_case)]
-
 use anyhow::Result;
 use curl::easy::{Easy, List};
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 
 /// Authenticate with Mojang
@@ -16,8 +14,8 @@ use serde_json::json;
 pub struct Authenticate {
     username: String,
     password: String,
-    clientToken: Option<String>,
-    requestUser: bool,
+    client_token: Option<String>,
+    request_user: bool,
 }
 
 impl Authenticate {
@@ -33,8 +31,8 @@ impl Authenticate {
             },
             "username": self.username,
             "password": self.password,
-            "clientToken": self.clientToken,
-            "requestUser": self.requestUser
+            "clientToken": self.client_token,
+            "requestUser": self.request_user
         });
 
         let res = post_request(&Self::get_endpoint(), &payload.to_string())?;
@@ -45,8 +43,8 @@ impl Authenticate {
         Self {
             username: username.into(),
             password: password.into(),
-            clientToken: None,
-            requestUser: false,
+            client_token: None,
+            request_user: false,
         }
     }
 }
@@ -54,9 +52,12 @@ impl Authenticate {
 /// Refresh a valid accessToken
 #[derive(Debug, Serialize, Clone)]
 pub struct Refresh {
-    accessToken: String,
-    clientToken: String,
-    requestUser: bool,
+    #[serde(rename = "accessToken")]
+    access_token: String,
+    #[serde(rename = "clientToken")]
+    client_token: String,
+    #[serde(rename = "requestUser")]
+    request_user: bool,
 }
 
 impl Refresh {
@@ -70,11 +71,11 @@ impl Refresh {
         Ok(serde_json::from_str(&res)?)
     }
 
-    pub fn new<S: Into<String>>(accessToken: S, clientToken: S, requestUser: bool) -> Self {
+    pub fn new<S: Into<String>>(access_token: S, client_token: S, request_user: bool) -> Self {
         Self {
-            accessToken: accessToken.into(),
-            clientToken: clientToken.into(),
-            requestUser: requestUser,
+            access_token: access_token.into(),
+            client_token: client_token.into(),
+            request_user: request_user,
         }
     }
 }
@@ -82,8 +83,10 @@ impl Refresh {
 /// Validate an existing access token
 #[derive(Debug, Serialize, Clone)]
 pub struct Validate {
-    accessToken: String,
-    clientToken: Option<String>,
+    #[serde(rename = "accessToken")]
+    access_token: String,
+    #[serde(rename = "clientToken")]
+    client_token: Option<String>,
 }
 
 impl Validate {
@@ -97,10 +100,10 @@ impl Validate {
         Ok(())
     }
 
-    pub fn new<S: Into<String>>(accessToken: S, clientToken: Option<String>) -> Self {
+    pub fn new<S: Into<String>>(access_token: S, client_token: Option<String>) -> Self {
         Self {
-            accessToken: accessToken.into(),
-            clientToken: clientToken.into(),
+            access_token: access_token.into(),
+            client_token: client_token.into(),
         }
     }
 }
@@ -134,8 +137,10 @@ impl SignOut {
 /// Invalidate an accessToken, using the accessToken and a clientToken
 #[derive(Debug, Serialize, Clone)]
 pub struct Invalidate {
-    accessToken: String,
-    clientToken: String,
+    #[serde(rename = "accessToken")]
+    access_token: String,
+    #[serde(rename = "clientToken")]
+    client_token: String,
 }
 
 impl Invalidate {
@@ -149,10 +154,10 @@ impl Invalidate {
         Ok(())
     }
 
-    pub fn new<S: Into<String>>(accessToken: S, clientToken: S) -> Self {
+    pub fn new<S: Into<String>>(access_token: S, client_token: S) -> Self {
         Self {
-            accessToken: accessToken.into(),
-            clientToken: clientToken.into(),
+            access_token: access_token.into(),
+            client_token: client_token.into(),
         }
     }
 }
@@ -160,10 +165,14 @@ impl Invalidate {
 /// Represents a response to a successful authentication
 #[derive(Debug, Deserialize, Clone)]
 pub struct AuthenticationResponse {
-    pub accessToken: String,
-    pub clientToken: Option<String>,
-    pub availableProfiles: Option<Vec<NameUUID>>,
-    pub selectedProfile: NameUUID,
+    #[serde(rename = "accessToken")]
+    pub access_token: String,
+    #[serde(rename = "clientToken")]
+    pub client_token: Option<String>,
+    #[serde(rename = "availableProfiles")]
+    pub available_profiles: Option<Vec<NameUUID>>,
+    #[serde(rename = "selectedProfile")]
+    pub selected_profile: NameUUID,
 }
 
 /// Represents a single username - UUID mapping.
