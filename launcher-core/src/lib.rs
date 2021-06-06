@@ -15,7 +15,7 @@ pub struct Launcher {
     pub access_token: String,
     pub client_token: Option<String>,
     pub profile: NameUUID,
-    pub game_directory: PathBuf,
+    pub launcher_directory: PathBuf,
 }
 
 impl Launcher {
@@ -33,7 +33,7 @@ pub struct LauncherBuilder {
     access_token: String,
     client_token: Option<String>,
     profile: NameUUID,
-    game_directory: Option<PathBuf>,
+    launcher_directory: Option<PathBuf>,
 }
 
 impl LauncherBuilder {
@@ -42,35 +42,44 @@ impl LauncherBuilder {
             access_token: auth_response.accessToken.clone(),
             client_token: auth_response.clientToken.clone(),
             profile: auth_response.selectedProfile.clone(),
-            game_directory: None,
+            launcher_directory: None,
         }
     }
 
-    pub fn game_directory<P: Into<PathBuf>>(mut self, game_directory: P) -> Self {
-        self.game_directory = Some(game_directory.into());
+    pub fn launcher_directory<P: Into<PathBuf>>(mut self, launcher_directory: P) -> Self {
+        self.launcher_directory = Some(launcher_directory.into());
         self
     }
 
     pub fn build(self) -> Result<Launcher> {
-        let game_directory = match self.game_directory {
+        let launcher_directory = match self.launcher_directory {
             Some(dir) => dir,
-            None => PathBuf::from(if cfg!(target_os = "windows") {
-                format!("{}/.minecraft", std::env::var("APPDATA")?)
-            } else if cfg!(target_os = "macos") {
-                format!(
-                    "{}/Library/Application Support/.minecraft",
-                    std::env::var("HOME")?
-                )
-            } else {
-                format!("{}/.minecraft", std::env::var("HOME")?)
-            }),
+            None => PathBuf::from(default_launcher_dir()?),
         };
 
         Ok(Launcher {
             access_token: self.access_token,
             client_token: self.client_token,
             profile: self.profile,
-            game_directory: game_directory,
+            launcher_directory: launcher_directory,
         })
     }
+}
+
+#[cfg(target_os = "windows")]
+fn default_launcher_dir() -> Result<String> {
+    Ok(format!("{}/.minecraft", std::env::var("APPDATA")?))
+}
+
+#[cfg(target_os = "macos")]
+fn default_launcher_dir() -> Result<String> {
+    Ok(format!(
+        "{}/Library/Application Support/.minecraft",
+        std::env::var("HOME")?
+    ))
+}
+
+#[cfg(not(any(target_os = "windows", target_os = "macos")))]
+fn default_launcher_dir() -> Result<String> {
+    Ok(format!("{}/.minecraft", std::env::var("HOME")?))
 }

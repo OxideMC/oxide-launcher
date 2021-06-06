@@ -76,7 +76,7 @@ fn launch(_matches: ArgMatches, launcher_directory: PathBuf) -> Result<()> {
     let auth_response = Authenticate::new(email_or_username.trim(), password.trim()).perform()?;
 
     let _launcher = Launcher::builder(&auth_response)
-        .game_directory(launcher_directory)
+        .launcher_directory(launcher_directory)
         .build()?;
 
     // todo: download minecraft
@@ -86,19 +86,26 @@ fn launch(_matches: ArgMatches, launcher_directory: PathBuf) -> Result<()> {
 }
 
 fn launcher_directory() -> Result<String> {
-    Ok(
-        env::var("MC_LAUNCHER_DIRECTORY").unwrap_or(if cfg!(target_os = "windows") {
-            format!("{}\\.oxide-cli", env::var("APPDATA").unwrap())
-        } else if cfg!(target_os = "macos") {
-            format!(
-                "{}/Library/Application Support/.oxide-cli",
-                env::var("HOME").unwrap()
-            )
-        } else {
-            format!(
-                "{}/.oxide-cli",
-                env::var("XDG_CONFIG_HOME").unwrap_or(env::var("HOME").unwrap())
-            )
-        }),
-    )
+    Ok(env::var("OXIDE_LAUNCHER_DIRECTORY").unwrap_or(default_launcher_dir()?))
+}
+
+#[cfg(target_os = "windows")]
+fn default_launcher_dir() -> Result<String> {
+    Ok(format!("{}/.oxide-cli", std::env::var("APPDATA")?))
+}
+
+#[cfg(target_os = "macos")]
+fn default_launcher_dir() -> Result<String> {
+    Ok(format!(
+        "{}/Library/Application Support/.oxide-cli",
+        std::env::var("HOME")?
+    ))
+}
+
+#[cfg(not(any(target_os = "windows", target_os = "macos")))]
+fn default_launcher_dir() -> Result<String> {
+    Ok(format!(
+        "{}/.oxide-cli",
+        env::var("XDG_CONFIG_HOME").unwrap_or(env::var("HOME")?)
+    ))
 }
